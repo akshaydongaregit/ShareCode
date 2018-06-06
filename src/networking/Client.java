@@ -9,10 +9,11 @@ public class Client extends JFrame{
 	final int PORT=2852;
 	Socket socket=null;
 	ClientItem item;
+	
 	public void connectTo(String address)
 	{
 		try {
-			Socket con=new Socket(address,PORT);
+			socket=new Socket(address,PORT);
 			System.out.println("Connected to "+address);
 		}catch(Exception e)
 		{
@@ -20,4 +21,26 @@ public class Client extends JFrame{
 		}
 		
 	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
+
+	public ClientItem getItem() {
+		return item;
+	}
+
+	public void setItem(ClientItem item) {
+		this.item = item;
+	}
+
+	public int getPORT() {
+		return PORT;
+	}
+	
+	
 }

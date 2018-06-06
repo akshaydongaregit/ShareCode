@@ -29,6 +29,8 @@ public class MainInterface extends JFrame{
 	Client clients[]=new Client[10];
 	int clientCount=0;
 	
+	String userName="Akshay";
+	
 	public MainInterface()
 	{
 		initSelf();
@@ -36,7 +38,10 @@ public class MainInterface extends JFrame{
 		initConnectPanel();
 		initConList();
 		this.setVisible(true);
+		
+		server.setInterf(this);
 	}
+	
 	@Override
 	public void paint(Graphics g)
 	{
@@ -113,6 +118,7 @@ public class MainInterface extends JFrame{
 		
 		
 	}
+	
 	private void initConnectPanel()
 	{
 		//configure connect panel.
@@ -175,6 +181,7 @@ public class MainInterface extends JFrame{
 		refreshInterface();
 		
 	}
+	
 	private void stopServer()
 	{
 		System.out.println("stopping server "+server.getStatus());
@@ -190,9 +197,30 @@ public class MainInterface extends JFrame{
 	}
 	public void refreshInterface()
 	{
-		//if()
+		
 	}
-	
+	public void addConnection(Client client)
+	{
+		clients[clientCount]=client;
+		clientCount++;
+		ClientItem item=client.getItem();
+		
+		//configure item.
+			
+				item.setActionListener(new TButtonActionListener() {
+					@Override
+					public void onAction() {
+						System.exit(0);
+					}
+				});
+			
+				item.setSize(200,40);
+				item.setLocation(50,10+clientCount*40);
+				
+		conList.add(item);
+		conList.repaint();
+		this.repaint();
+	}
 	public static void main(String[] args) {
 		
 		MainInterface interf=new MainInterface();

@@ -10,6 +10,8 @@ public class AppServer {
 	ServerSocket server;
 	String status="stopped";
 	
+	MainInterface interf=null;
+	
 	public boolean startServer(){
 		
 		Thread t=new Thread(new Runnable()
@@ -78,8 +80,24 @@ public class AppServer {
 	public int getPORT() {
 		return PORT;
 	}
+	
+	public MainInterface getInterf() {
+		return interf;
+	}
+
+	public void setInterf(MainInterface interf) {
+		this.interf = interf;
+	}
+
 	public void handleConnection(Socket con)
 	{
-		System.out.println("Handling connection");
+		System.out.println("Handling connection for "+con.getInetAddress());
+		Client client=new Client();
+		ClientItem clientItem = new ClientItem(""+con.getInetAddress());
+		clientItem.setParent(client);
+		client.setItem(clientItem);
+		
+		if(interf!=null)
+			interf.addConnection(client);
 	}
 }
