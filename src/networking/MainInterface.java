@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -38,7 +40,6 @@ public class MainInterface extends JFrame{
 		initConnectPanel();
 		initConList();
 		this.setVisible(true);
-		
 		server.setInterf(this);
 	}
 	
@@ -61,6 +62,19 @@ public class MainInterface extends JFrame{
 		conList.setBackground(new Color(255,255,255,255));
 		conList.setLayout(null);
 		back.add(conList);
+		
+		TButton close=new TButton("X");
+		close.setActionListener(new TButtonActionListener() {
+			@Override
+			public void onAction() {
+				System.exit(0);
+			}
+		});
+	
+		close.setSize(40,40);
+		//conList.add(close);
+		close.setLocation(50,10);
+			
 	}
 	
 	private void initComp()
@@ -160,7 +174,7 @@ public class MainInterface extends JFrame{
 	{
 		this.setTitle("Share Easily - Akshay");
 		this.setSize(windowSize);
-		this.setLocation(200,100);
+		this.setLocation(100,-10);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0,0,0,0));
@@ -191,36 +205,51 @@ public class MainInterface extends JFrame{
 	}
 	private void connect()
 	{
-		clients[clientCount]=new Client();
-		clients[clientCount].connectTo(address.getText());
-		clientCount++;
+		//clients[clientCount]=new Client();
+		//clients[clientCount].connectTo(address.getText());
+		//clientCount++;
+		Client client=new Client();
+		client.connectTo(address.getText());
+		
+		ClientItem clientItem = new ClientItem(""+client.getSocket().getInetAddress());
+		clientItem.setParent(client);
+		client.setItem(clientItem);
+		client.setEstablished(client.getSocket());
+		addConnection(client);
 	}
+	
 	public void refreshInterface()
 	{
 		
 	}
+	
 	public void addConnection(Client client)
 	{
 		clients[clientCount]=client;
 		clientCount++;
 		ClientItem item=client.getItem();
-		
+		//TButton item=new TButton(client.getItem().getText());
 		//configure item.
-			
-				item.setActionListener(new TButtonActionListener() {
-					@Override
-					public void onAction() {
-						System.exit(0);
-					}
-				});
+		item.setActionListener(new TButtonActionListener() {
+			@Override
+			public void onAction() {
+					System.out.println("called");
+					ClientInterface inter=new ClientInterface();
+					inter.setClient(client);
+				}
+			});
 			
 				item.setSize(200,40);
-				item.setLocation(50,10+clientCount*40);
+				
+				item.setLocation(50,10+(clientCount-1)*42);
 				
 		conList.add(item);
 		conList.repaint();
-		this.repaint();
+		
+		//this.repaint();
+		
 	}
+	
 	public static void main(String[] args) {
 		
 		MainInterface interf=new MainInterface();

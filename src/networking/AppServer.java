@@ -11,7 +11,7 @@ public class AppServer {
 	String status="stopped";
 	
 	MainInterface interf=null;
-	
+	Socket con;
 	public boolean startServer(){
 		
 		Thread t=new Thread(new Runnable()
@@ -94,8 +94,17 @@ public class AppServer {
 		System.out.println("Handling connection for "+con.getInetAddress());
 		Client client=new Client();
 		ClientItem clientItem = new ClientItem(""+con.getInetAddress());
+		clientItem.setActionListener(new TButtonActionListener() {
+			@Override
+			public void onAction() {
+					System.out.println("called");
+					ClientInterface inter=new ClientInterface();
+					inter.setClient(client);
+				}
+			});
 		clientItem.setParent(client);
 		client.setItem(clientItem);
+		client.setEstablished(con);
 		
 		if(interf!=null)
 			interf.addConnection(client);

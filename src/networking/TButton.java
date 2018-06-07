@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 
 public class TButton extends JPanel {
 
+	public static int count=0;
+	
 	TLayout layout=TLayout.getDefaultLayout();
 	String text="";
 	TButtonActionListener actionListener=null;
@@ -23,11 +25,15 @@ public class TButton extends JPanel {
 		super();
 		this.setBackground(layout.getBackground());
 		layout.setBackground(new Color(10,40,255,250));
+		
+		System.out.println("btn created "+count);
+		count++;
+		
 		super.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				//System.out.println("mouse clicked");
+				System.out.println("mouse clicked");
 				if(actionListener!=null)
 					actionListener.onAction();
 			}

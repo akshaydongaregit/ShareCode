@@ -9,6 +9,12 @@ public class Client extends JFrame{
 	final int PORT=2852;
 	Socket socket=null;
 	ClientItem item;
+	Socket established=null;
+	
+	public Client()
+	{
+		
+	}
 	
 	public void connectTo(String address)
 	{
@@ -41,6 +47,17 @@ public class Client extends JFrame{
 	public int getPORT() {
 		return PORT;
 	}
-	
+
+	public Socket getEstablished() {
+		return established;
+	}
+
+	public void setEstablished(Socket established) {
+		this.established = established;
+	}
+	public void disconnect()
+	{
+		this.established=null;
+	}
 	
 }
