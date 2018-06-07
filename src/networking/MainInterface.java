@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -18,6 +19,7 @@ import javax.swing.border.Border;
 public class MainInterface extends JFrame{
 
 	Dimension windowSize=new Dimension(600,800);
+	Point windowLocation=new Point(50,100);
 	JPanel back=new JPanel();
 	JPanel connectPanel=new JPanel();
 	TButton close;
@@ -25,7 +27,7 @@ public class MainInterface extends JFrame{
 	TButton stop;
 	JTextField address;
 	TButton connect;
-	ClientList conList=new ClientList();
+	JPanel conList=new JPanel();
 	
 	AppServer server=new AppServer();
 	Client clients[]=new Client[10];
@@ -63,7 +65,7 @@ public class MainInterface extends JFrame{
 		conList.setLayout(null);
 		back.add(conList);
 		
-		TButton close=new TButton("X");
+		ClientItem close=new ClientItem("X");
 		close.setActionListener(new TButtonActionListener() {
 			@Override
 			public void onAction() {
@@ -74,7 +76,7 @@ public class MainInterface extends JFrame{
 		close.setSize(40,40);
 		//conList.add(close);
 		close.setLocation(50,10);
-			
+	
 	}
 	
 	private void initComp()
@@ -174,7 +176,7 @@ public class MainInterface extends JFrame{
 	{
 		this.setTitle("Share Easily - Akshay");
 		this.setSize(windowSize);
-		this.setLocation(100,-10);
+		this.setLocation(windowLocation);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0,0,0,0));
@@ -212,7 +214,7 @@ public class MainInterface extends JFrame{
 		client.connectTo(address.getText());
 		
 		ClientItem clientItem = new ClientItem(""+client.getSocket().getInetAddress());
-		clientItem.setParent(client);
+		clientItem.setClient(client);
 		client.setItem(clientItem);
 		client.setEstablished(client.getSocket());
 		addConnection(client);
@@ -228,8 +230,7 @@ public class MainInterface extends JFrame{
 		clients[clientCount]=client;
 		clientCount++;
 		ClientItem item=client.getItem();
-		//TButton item=new TButton(client.getItem().getText());
-		//configure item.
+		
 		item.setActionListener(new TButtonActionListener() {
 			@Override
 			public void onAction() {
@@ -238,15 +239,14 @@ public class MainInterface extends JFrame{
 					inter.setClient(client);
 				}
 			});
-			
-				item.setSize(200,40);
-				
-				item.setLocation(50,10+(clientCount-1)*42);
-				
-		conList.add(item);
-		conList.repaint();
 		
-		//this.repaint();
+		item.setSize(200,40);
+				
+		item.setLocation(50,10+(clientCount-1)*42);
+				
+		conList.setVisible(false);
+		conList.add(item);
+		conList.setVisible(true);
 		
 	}
 	

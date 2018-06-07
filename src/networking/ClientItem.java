@@ -1,6 +1,7 @@
 package networking;
 
 import java.awt.Color;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,28 +15,20 @@ import javax.swing.JPanel;
 
 public class ClientItem extends JPanel{
 	
-	Client parent=null;
+	private static final long serialVersionUID = 1L;
+
 	TButtonActionListener actionListener=null;
-	
-	public Client getParent() {
-		return parent;
-	}
-
-	public void setParent(Client parent) {
-		this.parent = parent;
-	}
-	
-
 	TLayout layout=TLayout.getDefaultLayout();
 	String text="";
-	
+	Client client;
 	public ClientItem()
 	{
 		super();
 		this.setBackground(layout.getBackground());
 		layout.setBackground(new Color(10,40,255,250));
 		
-
+		System.out.println("listener added.");
+		
 		super.addMouseListener(new MouseListener(){
 
 			@Override
@@ -104,6 +97,15 @@ public class ClientItem extends JPanel{
 		g2d.drawString(text,x,y);
 	}
 	
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
 	public TLayout getTLayout() {
 		return layout;
 	}

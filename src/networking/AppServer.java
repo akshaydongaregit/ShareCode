@@ -94,15 +94,17 @@ public class AppServer {
 		System.out.println("Handling connection for "+con.getInetAddress());
 		Client client=new Client();
 		ClientItem clientItem = new ClientItem(""+con.getInetAddress());
-		clientItem.setActionListener(new TButtonActionListener() {
+		
+		/*clientItem.setActionListener(new TButtonActionListener() {
 			@Override
 			public void onAction() {
 					System.out.println("called");
 					ClientInterface inter=new ClientInterface();
 					inter.setClient(client);
 				}
-			});
-		clientItem.setParent(client);
+			});*/
+		
+		clientItem.setClient(client);
 		client.setItem(clientItem);
 		client.setEstablished(con);
 		

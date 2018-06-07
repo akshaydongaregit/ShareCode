@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.io.File;
 import java.net.Socket;
 
@@ -17,6 +18,8 @@ import javax.swing.JTextField;
 public class ClientInterface extends JFrame{
 
 	Dimension windowSize=new Dimension(600,800);
+	Point location=new Point(700,100);
+	
 	JPanel back=new JPanel();
 	TButton close;
 	TButton send;
@@ -38,7 +41,7 @@ public class ClientInterface extends JFrame{
 	
 	
 	@Override
-	public void paint(Graphics g)
+	public void paintComponents(Graphics g)
 	{
 		super.paint(g);
 		
@@ -117,7 +120,8 @@ public class ClientInterface extends JFrame{
 	{
 		this.setTitle("Share Easily - Akshay");
 		this.setSize(windowSize);
-		this.setLocation(100,-10);
+		this.setLocation(location);
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0,0,0,0));
