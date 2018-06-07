@@ -94,6 +94,20 @@ public class MainInterface extends JFrame{
 		back.add(close);
 		close.setLocation(550,10);
 		
+		//configure minimize button
+		TButton mini=new TButton("-");		
+				mini.setActionListener(new TButtonActionListener() {
+					@Override
+					public void onAction() {
+						setExtendedState(JFrame.ICONIFIED);
+					}
+				});
+			
+				mini.setSize(40,40);
+				back.add(mini);
+				mini.setLocation(500,10);
+				
+				
 		//configure start button.
 		start=new TButton("Start Server");
 		start.setActionListener(new TButtonActionListener() {
@@ -210,6 +224,7 @@ public class MainInterface extends JFrame{
 		//clients[clientCount]=new Client();
 		//clients[clientCount].connectTo(address.getText());
 		//clientCount++;
+		
 		Client client=new Client();
 		client.connectTo(address.getText());
 		
@@ -237,6 +252,7 @@ public class MainInterface extends JFrame{
 					System.out.println("called");
 					ClientInterface inter=new ClientInterface();
 					inter.setClient(client);
+					inter.startListening();
 				}
 			});
 		

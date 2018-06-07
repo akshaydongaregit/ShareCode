@@ -107,8 +107,8 @@ public class AppServer {
 		clientItem.setClient(client);
 		client.setItem(clientItem);
 		client.setEstablished(con);
-		
 		if(interf!=null)
 			interf.addConnection(client);
+		
 	}
 }

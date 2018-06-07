@@ -14,7 +14,8 @@ public class FileItem extends TButton{
 	}
 	public FileItem(String str)
 	{
-		super(str);
+		super();
+		super.text=str;
 	}
 	public File getFile() {
 		return file;

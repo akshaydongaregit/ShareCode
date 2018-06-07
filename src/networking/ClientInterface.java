@@ -8,7 +8,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -17,6 +22,8 @@ import javax.swing.JTextField;
 
 public class ClientInterface extends JFrame{
 
+	ClientInterface im=null;
+	
 	Dimension windowSize=new Dimension(600,800);
 	Point location=new Point(700,100);
 	
@@ -31,6 +38,8 @@ public class ClientInterface extends JFrame{
 	Client client=null;
 	
 	public ClientInterface() {
+		im = this;
+		
 		initSelf();
 		initComp();
 		initSentList();
@@ -111,6 +120,19 @@ public class ClientInterface extends JFrame{
 			}
 		});
 	
+		//configure minimize button
+		TButton mini=new TButton("-");		
+				mini.setActionListener(new TButtonActionListener() {
+					@Override
+					public void onAction() {
+						setExtendedState(JFrame.ICONIFIED);
+					}
+				});
+			
+				mini.setSize(40,40);
+				back.add(mini);
+				mini.setLocation(500,10);
+				
 		close.setSize(40,40);
 		back.add(close);
 		close.setLocation(550,10);
@@ -159,9 +181,20 @@ public class ClientInterface extends JFrame{
 	private void send()
 	{
 		File file=new File(txtFile.getText());
-		FileItem item=new FileItem(file.getName());
+		FileItem item=new FileItem(file.getPath());
+		
 		item.setFile(file);
 		addFile(item);
+		
+		//this.sendMessage(item.getText());
+		
+		TransmitionHandler thand=new TransmitionHandler();
+		try {
+			thand.sendFile(file,im.getClient().getEstablished().getOutputStream());
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 	}
 	
 	public Client getClient() {
@@ -178,4 +211,66 @@ public class ClientInterface extends JFrame{
 		ClientInterface inter=new ClientInterface();
 	}
 	
+	
+	public void sendMessage(String message)
+	{
+		//Socket con=this.getClient().getEstablished();
+		//String message="hello";
+		
+		Socket con = null;
+		if(im.getClient()!=null)
+			con=im.getClient().getEstablished();
+		
+		System.out.println(" con status : "+con.isConnected());
+		
+		try
+		{
+			InputStream in=con.getInputStream();
+			OutputStream out=con.getOutputStream();
+			out.write(message.getBytes());
+		
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void startListening()
+	{
+		Thread t=new Thread(new Runnable(){
+			@Override
+			public void run() {
+				System.out.println("starting listening");
+				Socket con = null;
+				if(im.getClient()!=null)
+					con=im.getClient().getEstablished();
+				try
+				{
+				InputStream in=con.getInputStream();
+				OutputStream out=con.getOutputStream();
+				
+				while(true)
+				{
+					Scanner sin=new Scanner(in);
+					
+					byte data[]=new byte[100];
+					//in.read(data,0,100);
+					String recived=sin.nextLine();//new String(data);
+					System.out.println("Recieved "+recived);
+					if(recived.equalsIgnoreCase("RECIEVE_FILE"))
+					{
+						TransmitionHandler thand=new TransmitionHandler();
+						thand.recieveFile(in,sin);
+					}
+				}
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		t.start();
+	}
 }
